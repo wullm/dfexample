@@ -31,7 +31,7 @@ struct physical_const {
     const double neutrino_temperature_eV;
 };
 
-/* Define the unit system and constants */
+/* Define the unit system and constants (Mpc, Gyr, 10^10 M_sol, Kelvin)*/
 struct internal_units units = {3.085678e+22, 3.153600e+16, 1.988435e+40, 1.0};
 struct physical_const phys_const = {3.063915e+02, 7.252438e-76, 1.756589e-103,
            8.416104e-72, 1.951758,     1.681895e-04
