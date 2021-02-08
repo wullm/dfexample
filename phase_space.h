@@ -22,7 +22,7 @@ struct internal_units {
 };
 
 /* Physical constants in internal units */
-struct physical_const {
+struct phys_const {
     const double speed_of_light;
     const double boltzmann_constant;
     const double reduced_planck_constant;
@@ -56,7 +56,7 @@ static inline double sampleUniform(uint64_t *state) {
 }
 
 /* Generate standard normal variable with the Box-Mueller transform */
-double sampleGaussian(uint64_t *state) {
+static inline double sampleGaussian(uint64_t *state) {
     /* Generate random integers */
     const uint64_t A = splitmix64(state);
     const uint64_t B = splitmix64(state);
@@ -80,11 +80,9 @@ double sampleGaussian(uint64_t *state) {
  *
  * @param v Array of 3 velocity components
  * @param m_eV Neutrino mass in electronvolts
+ * @param c Speed of light
  */
-static inline double
-fermi_dirac_momentum(double *v, double m_eV,
-                     const struct physical_const *phys_const) {
-    const double c = phys_const->speed_of_light;
+static inline double fermi_dirac_momentum(double *v, double m_eV, double c) {
     const double u = hypot3(v[0], v[1], v[2]);
     const double p_eV = u * m_eV / c;
 
@@ -96,13 +94,9 @@ fermi_dirac_momentum(double *v, double m_eV,
  * space, according to the 0th order background model: f_0(x,p,t).
  *
  * @param p_eV Present-day momentum in electronvolts
+ * @param T_eV Present-day temperature in electronvolts
  */
-static inline double
-fermi_dirac_density(double p_eV, const struct physical_const *phys_const) {
-    /* Retrieve physical constants */
-    const double T_eV =
-        phys_const->neutrino_temperature_eV; // present-day in eV
-
+static inline double fermi_dirac_density(double p_eV, double T_eV) {
     return 1.0 / (exp(p_eV / T_eV) + 1.0);
 }
 
@@ -116,11 +110,11 @@ fermi_dirac_density(double p_eV, const struct physical_const *phys_const) {
  * @param x Array of 3 position components
  * @param w Reference to the weight of the particle
  * @param boxlen Comoving physical sidelength of the box
+ * @param phys_const Container of physical constants
  */
-static inline void
-init_neutrino_particle(uint64_t seed, double m_eV, double *v, double *x,
-                       double *w, double boxlen,
-                       const struct physical_const *phys_const) {
+static void init_neutrino_particle(uint64_t seed, double m_eV, double *v,
+                                   double *x, double *w, double boxlen,
+                                   const struct phys_const *phys_const) {
 
     /* Retrieve physical constants */
     const double T_eV = phys_const->neutrino_temperature_eV; // present-day (eV)
@@ -169,23 +163,24 @@ init_neutrino_particle(uint64_t seed, double m_eV, double *v, double *x,
  * @param x Array of 3 position components
  * @param w Reference to the weight of the particle
  * @param mass_factor Conversion factor from eV mass to simulation particle mass
+ * @param phys_const Container of physical constants
  */
-static inline void
-update_neutrino_particle(uint64_t seed, double m_eV, double *v, double *x,
-                         double *w, double mass_factor,
-                         const struct physical_const *phys_const) {
+static void update_neutrino_particle(uint64_t seed, double m_eV, double *v,
+                                     double *x, double *w, double mass_factor,
+                                     const struct phys_const *phys_const) {
 
-    /* Compute the neutrino temperature in electonvolts */
+    /* Retrieve physical constants */
     const double T_eV = phys_const->neutrino_temperature_eV; // present-day (eV)
+    const double c = phys_const->speed_of_light;
 
     /* Compute the phase-space density according to the background model */
-    const double p_eV = fermi_dirac_momentum(v, m_eV, phys_const);
-    const double f0 = fermi_dirac_density(p_eV, phys_const);
+    const double p_eV = fermi_dirac_momentum(v, m_eV, c);
+    const double f0 = fermi_dirac_density(p_eV, T_eV);
 
     /* Retrieve the exact density, which is preserved from the initial step */
     const double z = sampleUniform(&seed);
     const double p_initial_eV = fermi_dirac_transform(z) * T_eV;
-    const double f = fermi_dirac_density(p_initial_eV, phys_const);
+    const double f = fermi_dirac_density(p_initial_eV, T_eV);
 
     /* Compute the mass of an unweighted particle (as if not using delta-f) */
     const double mass = m_eV / mass_factor;
@@ -200,9 +195,10 @@ update_neutrino_particle(uint64_t seed, double m_eV, double *v, double *x,
  *
  * @param nr_neutrinos Total number of neutrino particles in simulation
  * @param boxlen Comoving physical sidelength of the box
+ * @param phys_const Container of physical constants
  */
 static double neutrino_mass_factor(long long nr_neutrinos, double boxlen,
-                                   const struct physical_const *phys_const) {
+                                   const struct phys_const *phys_const) {
     /* Some constants */
     const double T_nu = phys_const->neutrino_temperature;
     const double k_b = phys_const->boltzmann_constant;

@@ -29,7 +29,7 @@ int main() {
     const struct internal_units units = {3.085678e+22, 3.153600e+16,
               1.988435e+40, 1.0
     };
-    const struct physical_const phys_const = {3.063915e+02,  7.252438e-76,
+    const struct phys_const phys_const = {3.063915e+02,  7.252438e-76,
               1.756589e-103, 8.416104e-72,
               1.951758,      1.681895e-04
     };
