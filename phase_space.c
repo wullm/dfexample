@@ -25,6 +25,23 @@
 
 int main() {
 
+    /* Define the unit system and constants (Mpc, Gyr, 10^10 M_sol, Kelvin)*/
+    const struct internal_units units = {3.085678e+22, 3.153600e+16,
+              1.988435e+40, 1.0
+    };
+    const struct physical_const phys_const = {3.063915e+02,  7.252438e-76,
+              1.756589e-103, 8.416104e-72,
+              1.951758,      1.681895e-04
+    };
+
+    /* Print the unit system */
+    printf("Units:\n");
+    printf("U_L = %e m\n", units.length_unit_metres);
+    printf("U_t = %e s\n", units.time_unit_seconds);
+    printf("U_M = %e kg\n", units.mass_unit_kg);
+    printf("U_T = %e K\n", units.temperature_unit_kelvin);
+    printf("\n");
+
     /* Total number of neutrino particles */
     long long nr_nuparts = 256 * 256 * 256;
 
@@ -33,7 +50,8 @@ int main() {
 
     /* Compute tha conversion factor from microscopic mass in electronvolts
      * to simulation particle mass in internal mass units */
-    double mass_factor = neutrino_mass_factor(nr_nuparts, box_length);
+    double mass_factor =
+        neutrino_mass_factor(nr_nuparts, box_length, &phys_const);
 
     /* Prepare generating a particle */
     uint64_t id = 1000000; /* Particle id, used as random seed */
@@ -43,16 +61,16 @@ int main() {
     double m_eV = 0.05;    /* Neutrino mass in electronvolts */
 
     printf("microscopic mass = %f eV\n", m_eV);
-    printf("unweighted mass = %f 10^10 M_sol\n\n", m_eV / mass_factor);
+    printf("macroparticle mass = %f U_M\n\n", m_eV / mass_factor);
 
     /* Initialize the particle with a random position and velocity */
-    init_neutrino_particle(id, m_eV, v, x, &w, box_length);
+    init_neutrino_particle(id, m_eV, v, x, &w, box_length, &phys_const);
 
     /* Print some information about the particle */
     printf("Particle initialized with:\n");
-    printf("x[3] = (%.3f, %.3f, %.3f) Mpc\n", x[0], x[1], x[2]);
-    printf("v[3] = (%.3f, %.3f, %.3f) Mpc/Gyr\n", v[0], v[1], v[2]);
-    printf("weight = %e 10^10 M_sol\n\n", w);
+    printf("x[3] = (%.3f, %.3f, %.3f) U_L\n", x[0], x[1], x[2]);
+    printf("v[3] = (%.3f, %.3f, %.3f) U_L/U_t\n", v[0], v[1], v[2]);
+    printf("weight = %e 10^10 U_M\n\n", w);
 
     /* Update the velocity with a kick */
     v[0] *= 1.001;
@@ -60,13 +78,13 @@ int main() {
     v[2] *= 1.002;
 
     /* Update the particle weight */
-    update_neutrino_particle(id, m_eV, v, x, &w, mass_factor);
+    update_neutrino_particle(id, m_eV, v, x, &w, mass_factor, &phys_const);
 
     /* Print some information about the particle */
     printf("Particle state after update:\n");
-    printf("x[3] = (%.3f, %.3f, %.3f) Mpc\n", x[0], x[1], x[2]);
-    printf("v[3] = (%.3f, %.3f, %.3f) Mpc/Gyr\n", v[0], v[1], v[2]);
-    printf("weight = %e 10^10 M_sol\n", w);
+    printf("x[3] = (%.3f, %.3f, %.3f) U_L\n", x[0], x[1], x[2]);
+    printf("v[3] = (%.3f, %.3f, %.3f) U_L/U_t\n", v[0], v[1], v[2]);
+    printf("weight = %e U_M\n", w);
 
     return 0;
 }
