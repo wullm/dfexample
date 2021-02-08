@@ -42,6 +42,9 @@ int main() {
     double w;              /* Particle weight */
     double m_eV = 0.05;    /* Neutrino mass in electronvolts */
 
+    printf("microscopic mass = %f eV\n", m_eV);
+    printf("unweighted mass = %f 10^10 M_sol\n\n", m_eV / mass_factor);
+
     /* Initialize the particle with a random position and velocity */
     init_neutrino_particle(id, m_eV, v, x, &w, box_length);
 

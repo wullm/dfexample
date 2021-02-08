@@ -186,8 +186,11 @@ static inline void update_neutrino_particle(uint64_t seed, double m_eV,
     const double p_initial_eV = fermi_dirac_transform(z) * T_eV;
     const double f = fermi_dirac_density(p_initial_eV);
 
+    /* Compute the mass of an unweighted particle (as if not using delta-f) */
+    const double mass = m_eV / mass_factor;
+
     /* Update the weight */
-    *w = (1.0 - f0 / f) * m_eV * mass_factor;
+    *w = (1.0 - f0 / f) * mass;
 }
 
 /**
