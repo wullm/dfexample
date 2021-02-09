@@ -43,15 +43,14 @@ int main() {
     printf("\n");
 
     /* Total number of neutrino particles */
-    long long nr_nuparts = 256 * 256 * 256;
+    long long nr_nus = 256 * 256 * 256;
 
     /* Comoving physical sidelength of the box */
     double box_length = 256; // Mpc
 
-    /* Compute tha conversion factor from microscopic mass in electronvolts
+    /* Compute the conversion factor from microscopic mass in electronvolts
      * to simulation particle mass in internal mass units */
-    double mass_factor =
-        neutrino_mass_factor(nr_nuparts, box_length, &phys_const);
+    double mass_factor = neutrino_mass_factor(nr_nus, box_length, &phys_const);
 
     /* Prepare generating a particle */
     uint64_t id = 1000000; /* Particle id, used as random seed */
