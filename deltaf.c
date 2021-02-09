@@ -21,7 +21,7 @@
 #include <sys/time.h>
 
 /* Neutrino delta-f functions */
-#include "phase_space.h"
+#include "deltaf.h"
 
 /* Define the unit system and constants (Mpc, Gyr, 10^10 M_sol, Kelvin)*/
 const struct internal_units units = {3.085678e+22, 3.153600e+16,
