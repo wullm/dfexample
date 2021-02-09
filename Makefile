@@ -3,10 +3,10 @@ GCC = gcc
 CFLAGS = -Wall -Wshadow=global -fopenmp -march=native -O4
 
 all:
-	$(GCC) phase_space.c -o phase_space $(CFLAGS) -lm
+	$(GCC) delta_f.c -o delta_f $(CFLAGS) -lm
 
 clean:
-	rm phase_space
+	rm delta_f
 
 format:
 	clang-format-10 -style="{BasedOnStyle: LLVM, IndentWidth: 4, AlignConsecutiveMacros: true, IndentPPDirectives: AfterHash}" -i *.c *.h
