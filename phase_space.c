@@ -23,7 +23,6 @@
 /* Neutrino delta-f functions */
 #include "phase_space.h"
 
-
 int main() {
 
     /* Define the unit system and constants (Mpc, Gyr, 10^10 M_sol, Kelvin)*/
