@@ -16,12 +16,13 @@
  *
  ******************************************************************************/
 
-/* A custom header like this can be generated with the main program! */
-#include "phase_space.h"
-
 /* Standard headers */
 #include <stdio.h>
 #include <sys/time.h>
+
+/* Neutrino delta-f functions */
+#include "phase_space.h"
+
 
 int main() {
 
