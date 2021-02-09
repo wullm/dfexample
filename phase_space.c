@@ -23,24 +23,16 @@
 /* Neutrino delta-f functions */
 #include "phase_space.h"
 
+/* Define the unit system and constants (Mpc, Gyr, 10^10 M_sol, Kelvin)*/
+const struct internal_units units = {3.085678e+22, 3.153600e+16,
+          1.988435e+40, 1.0
+};
+const struct phys_const phys_const = {3.063915e+02,  7.252438e-76,
+          1.756589e-103, 8.416104e-72,
+          1.951758,      1.681895e-04
+};
+
 int main() {
-
-    /* Define the unit system and constants (Mpc, Gyr, 10^10 M_sol, Kelvin)*/
-    const struct internal_units units = {3.085678e+22, 3.153600e+16,
-              1.988435e+40, 1.0
-    };
-    const struct phys_const phys_const = {3.063915e+02,  7.252438e-76,
-              1.756589e-103, 8.416104e-72,
-              1.951758,      1.681895e-04
-    };
-
-    /* Print the unit system */
-    printf("Units:\n");
-    printf("U_L = %e m\n", units.length_unit_metres);
-    printf("U_t = %e s\n", units.time_unit_seconds);
-    printf("U_M = %e kg\n", units.mass_unit_kg);
-    printf("U_T = %e K\n", units.temperature_unit_kelvin);
-    printf("\n");
 
     /* Total number of neutrino particles */
     long long nr_nus = 256 * 256 * 256;
