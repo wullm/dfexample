@@ -78,7 +78,7 @@ static inline double sampleGaussian(uint64_t *state) {
  * energy units because E = a*sqrt(p^2 + m^2) = a*p, since p/m >> 1 at
  * decoupling. Note that this quantity is constant in a homogeneous Universe.
  *
- * @param v Array of 3 velocity components
+ * @param v Array of 3 velocity components (a^2 dx/dt, where x is comoving)
  * @param m_eV Neutrino mass in electronvolts
  * @param c Speed of light
  */
@@ -106,8 +106,8 @@ static inline double fermi_dirac_density(double p_eV, double T_eV) {
  *
  * @param seed A persistent unique seed for each neutrino particle
  * @param m_eV Neutrino mass in electronvolts
- * @param v Array of 3 velocity components
- * @param x Array of 3 position components
+ * @param v Array of 3 velocity components (a^2 dx/dt, where x is comoving)
+ * @param x Array of 3 position components (comoving position)
  * @param w Reference to the weight of the particle
  * @param boxlen Comoving physical sidelength of the box
  * @param phys_const Container of physical constants
@@ -159,8 +159,8 @@ static void init_neutrino_particle(uint64_t seed, double m_eV, double *v,
  *
  * @param seed A persistent unique seed for each neutrino particle
  * @param m_eV Neutrino mass in electronvolts
- * @param v Array of 3 velocity components
- * @param x Array of 3 position components
+ * @param v Array of 3 velocity components (a^2 dx/dt, where x is comoving)
+ * @param x Array of 3 position components (comoving position)
  * @param w Reference to the weight of the particle
  * @param mass_factor Conversion factor from eV mass to simulation particle mass
  * @param phys_const Container of physical constants
