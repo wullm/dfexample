@@ -61,7 +61,7 @@ int main() {
     printf("Particle initialized with:\n");
     printf("x[3] = (%.3f, %.3f, %.3f) U_L\n", x[0], x[1], x[2]);
     printf("v[3] = (%.3f, %.3f, %.3f) U_L/U_t\n", v[0], v[1], v[2]);
-    printf("weight = %e 10^10 U_M\n\n", w);
+    printf("weight = %e U_M\n\n", w);
 
     /* Update the velocity with a kick */
     v[0] *= 1.001;
